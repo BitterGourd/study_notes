@@ -137,7 +137,8 @@ class OuterClass {
 }
 // 创建对象
 OuterClass outer = new OuterClass();
-OuterClass.InnerClass inner = outer.new InnerClass(); // 很诡异的写法
+// 很诡异的写法
+OuterClass.InnerClass inner = outer.new InnerClass();
 OuterClass.StaticInnerClass staticInner = new OuterClass.StaticInnerClass();
 
 // ================= scala ================== 
@@ -150,9 +151,9 @@ object OuterClass {
 	class StaticInnerClass {}
 }
 // 创建对象
-val outer=new OuterClass()
-val inner=new outer.InnerClass()
-val staticInner=new OuterClass.StaticInnerClass()
+val outer = new OuterClass()
+val inner = new outer.InnerClass()
+val staticInner = new OuterClass.StaticInnerClass()
 ```
 
 ##### 类型投影
@@ -664,7 +665,7 @@ class Dog extends Animal {
 
 
 
-#### 特质(Trait)
+#### 特质 (Trait)
 
 ##### 使用方法
 
@@ -808,7 +809,7 @@ object Test {
 
 
 
-#### 数组(Array)
+#### 数组 (Array)
 
 ##### 定长数组
 
@@ -888,7 +889,7 @@ object Test {
    for (item <- array) { println(item) }
    ```
 
-##### yield推导新数组
+##### yield 推导新数组
 
 ```scala
 val arr = for(item <- array) yield item * 2
@@ -913,13 +914,13 @@ array.reverse
 ##### 多维数组
 
 ```scala
-val arr = Array.ofDim[Double](3,4)
 // 说明：二维数组中有三个一维数组，每个一维数组中有四个元素
+val arr = Array.ofDim[Double](3,4)
 ```
 
-##### Scala数组与Java数组互转
+##### Scala 数组与 Java 数组互转
 
-1. Scala数组转Java数组(List)
+1. Scala 数组转 Java 数组 (List)
 
    ```scala
    val arr = ArrayBuffer("1", "2", "3")
@@ -936,7 +937,7 @@ val arr = Array.ofDim[Double](3,4)
    println(arrList)
    ```
 
-2. Java数组(List)转Scala数组
+2. Java 数组 (List) 转 Scala 数组
 
    ```scala
    import scala.collection.JavaConversions.asScalaBuffer
@@ -949,7 +950,7 @@ val arr = Array.ofDim[Double](3,4)
 
 
 
-#### 元组(Tuple)
+#### 元组 (Tuple)
 
 > 元组可以存入多个不同类型的值, 目前 Scala 支持的元组最大长度为 22
 
@@ -969,13 +970,13 @@ val tuple = Tuple3(1, 2, 3)
 ##### 查询
 
 ```scala
-// 方式一	通过顺序号(_1,_2,_3,...)
+// 方式一 通过顺序号(_1,_2,_3,...)
 t1._1
 
-// 方式二	通过索引(productElement(index))
+// 方式二 通过索引(productElement(index))
 t1.productElement(1)
 
-// 方式三	通过别名
+// 方式三 通过别名
 scala> val t1,(a,b,c) = ("zhangsan","lisi","wangwu")
 scala> a
 res0: String = zhangsan
@@ -989,7 +990,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
 
 
 
-#### 列表(List)
+#### 列表 (List)
 
 ##### 不可变列表
 
@@ -1067,7 +1068,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
 
 
 
-#### 队列(Queue)
+#### 队列 (Queue)
 
 ##### 不可变队列
 
@@ -1154,7 +1155,7 @@ queue.tail
 
 
 
-#### 映射(Map)
+#### 映射 (Map)
 
 ##### 不可变映射
 
@@ -1199,13 +1200,18 @@ queue.tail
 
    ```scala
    // (1) 更新映射中的值
-   map.put("002","nanjing")	// 方式一
-   map("002") = "nanjing1"		// 方式二
+   // 方式一
+   map.put("002","nanjing")
+   // 方式二
+   map("002") = "nanjing1"
    
    // (2) 添加数据
-   map.put("003","dongjing")		// 方式一
-   map("004") = "xijing"			// 方式二
-   map += ("005" -> "tianjing")	// 方式三
+   // 方式一
+   map.put("003","dongjing")
+   // 方式二
+   map("004") = "xijing"
+   // 方式三
+   map += ("005" -> "tianjing")
    
    // (3) 删除数据
    map -= "001"
@@ -1214,25 +1220,25 @@ queue.tail
 ##### Map 取值
 
 ```scala
-/** 方式一	map(key)
+/** 方式一 map(key)
  * 1) 如果 key 存在，则返回对应的值
  * 2) 如果 key 不存在，则抛出异常
  * 3) 在 Java 中,如果 key 不存在则返回 null
  */
 val value = map("001")
 
-/** 方式二	map.get(key)
+/** 方式二 map.get(key)
  * 返回一个Option对象，要么是Some，要么是None
  */
 println(map.get("001"))
 
-/** 方式三	map.getOrElse()
+/** 方式三 map.getOrElse()
  * 1) 如果key存在，返回key对应的值
  * 2) 如果 key 不存在，返回默认值
  */
 println(map.getOrElse("001","default_value"))
 
-/** 方式四	contains 检查 key 是否存在
+/** 方式四 contains 检查 key 是否存在
  * 1) 如果 key 存在，则返回 true
  * 2) 如果 key 不存在，则返回 false
  */
@@ -1257,7 +1263,7 @@ for (v <- map.values) print("value = " + v + "\t")
 
 
 
-#### 集合(Set)
+#### 集合 (Set)
 
 ##### 不可变集合
 
@@ -1292,7 +1298,7 @@ for (v <- map.values) print("value = " + v + "\t")
    // (1) += 添加元素，多个元素用（）包起来
    set += 4
    
-   // (2) add	返回值：Boolean
+   // (2) add 返回值：Boolean
    set.add(5)
    set add 6
    
@@ -1308,7 +1314,7 @@ for (v <- map.values) print("value = " + v + "\t")
 
 
 
-#### Iterable常用方法
+#### Iterable 常用方法
 
 ##### foreach
 
@@ -1429,10 +1435,10 @@ val res3 = arr.reduceRight((x,y) => x - y)
 
 ```scala
 val arr = List(1, 2, 3, 4)
-// -5	->	(((5, 1), 2), 3, 4)
+// -5 -> (((5, 1), 2), 3, 4)
 val res1 = arr.foldLeft(5)((x,y) => x - y)
 val res1 = (5 /: arr)((x,y) => x - y)
-// 3	->	(1, (2, (3, (4, 5))))
+// 3 -> (1, (2, (3, (4, 5))))
 val res2 = arr.foldRight(5)((x,y) => x - y)
 val res1 = (arr :\ 5)((x,y) => x - y)
 ```
@@ -1442,14 +1448,16 @@ val res1 = (arr :\ 5)((x,y) => x - y)
 > 对某个集合的所有元素做 fold 操作，但是会把产生的所有中间结果放置于一个集合中保存
 
 ```scala
-(1 to 5).scanLeft(5)((x,y) => x - y)	// Vector(5, 4, 2, -1, -5, -10)
-(1 to 5).scanLeft(5)((x,y) => x + y)	// Vector(5, 6, 8, 11, 15, 20)
+// Vector(5, 4, 2, -1, -5, -10)
+(1 to 5).scanLeft(5)((x,y) => x - y)
+// Vector(5, 6, 8, 11, 15, 20)
+(1 to 5).scanLeft(5)((x,y) => x + y)
 ```
 
 ##### groupBy/grouped
 
 ```scala
-/** groupBy	返回一个新的Map集合，按照key将元素进行分组 */
+/** groupBy 返回一个新的Map集合，按照key将元素进行分组 */
 List("boy" -> "xiaobei", "boy" -> "xiaonan", "girl" -> "xiaotian").groupBy(x => x._1)
 //	Map(girl -> List((girl,xiaotian)), boy -> List((boy,xiaobei), (boy,xiaonan)))
 
@@ -1471,16 +1479,19 @@ Map("dog" -> List(1, 2, 4), "cat" -> List(2, 3)).mapValues(x => x.size)
 > stream 是一个集合。这个集合，可以用于存放无穷多个元素，但是这无穷个元素并不会一次性生产出来，而是需要用到多大的区间，就会动态的生产，末尾元素遵循 lazy 规则(即：要使用结果才进行计算)
 
 ```scala
-// 创建的集合的第一个元素是 n , 后续元素生成的规则是 n + 1
+// 创建的集合的第一个元素是 n, 后续元素生成的规则是 n + 1
 def numsForm(n: BigInt) : Stream[BigInt] = n #:: numsForm(n + 1)
 
 val stream = numsForm(1)
 println("stream = " + stream)
-//希望再取一个流集合数据
-println(stream.tail) //(2,?)，tail 表示返回除了第一个以外剩余的元素
-println("stream =" + stream) // (1,2,?)
+// 希望再取一个流集合数据
+// (2,?)，tail 表示返回除了第一个以外剩余的元素
+println(stream.tail)
+// (1,2,?)
+println("stream =" + stream)
 println("stream.head=" + stream.head)
-// println("stream.last" + stream.last)	// 死循环，last 表示返回集合最后一个元素
+// 死循环，last 表示返回集合最后一个元素
+// println("stream.last" + stream.last)
 ```
 
 ##### view
@@ -1704,6 +1715,7 @@ val addOne = new PartialFunction[Any, Int] {
 val list1 = list.map(addOne) // (X) map函数不支持偏函数
 val list1 = list.collect(addOne) // OK collect函数支持偏函数
 println(list1)
+
 // ====================== 简单的实现方法 =======================
 def f2: PartialFunction[Any, Int] = {
   // case语句可以自动转换为偏函数
@@ -1711,6 +1723,7 @@ def f2: PartialFunction[Any, Int] = {
 }
 val rf2 = List(1, 2, 3, 4, "ABC") collect f2
 println(rf2)
+
 // ====================== 简化 =======================
 val rf2 = List(1, 2, 3, 4, "ABC") collect { case i: Int => i + 1 }
 println(rf2)
@@ -1724,10 +1737,11 @@ println(rf2)
 
 ```scala
 def 函数名（参数名[：参数类型]…）[: 返回值类型 = ] { 函数体 }
-// 如果函数中无返回值，那么返回值类型无需声明
-// 如果函数中有返回值，且使用 return 关键字声明，那么返回值类型需要声明
-// 如果函数有返回值，但是返回值类型没有声明，那么方法返回值由 Scala 自行推断
-// 函数调用 : 函数名()，如果函数无参数列表，那么小括号可以省略
+/** 如果函数中无返回值，那么返回值类型无需声明
+ *  如果函数中有返回值，且使用 return 关键字声明，那么返回值类型需要声明
+ *  如果函数有返回值，但是返回值类型没有声明，那么方法返回值由 Scala 自行推断
+ *  函数调用 : 函数名()，如果函数无参数列表，那么小括号可以省略
+ */
 ```
 
 ##### 过程
