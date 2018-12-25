@@ -10,7 +10,7 @@
 
 ##### Scala 与 Java 的关系
 
-![](1545190265306.png)
+![](../img/1545190265306.png)
 
 ##### Scala 的 REPL
 
@@ -801,11 +801,11 @@ object Test {
 
 ##### 不可变集合
 
-![](clip_image002.png)
+![](../img/immutable.png)
 
 ##### 可变集合
 
-![](clip_image001.png)
+![](../img/mutable.png)
 
 
 
@@ -1228,12 +1228,12 @@ queue.tail
 val value = map("001")
 
 /** 方式二 map.get(key)
- * 返回一个Option对象，要么是Some，要么是None
+ * 返回一个 Option 对象，要么是 Some，要么是 None
  */
 println(map.get("001"))
 
 /** 方式三 map.getOrElse()
- * 1) 如果key存在，返回key对应的值
+ * 1) 如果 key 存在，返回 key 对应的值
  * 2) 如果 key 不存在，返回默认值
  */
 println(map.getOrElse("001","default_value"))
@@ -1514,6 +1514,8 @@ for (item <- res) print(item + " ")
 
 > 从第一个 case 分支开始匹配，如果匹配成功，那么执行对应的逻辑代码
 >
+> 每个case中，不用 break 语句，自动中断 case
+>
 > 如果匹配不成功，继续执行下一个分支进行判断
 >
 > 如果所有 case 都不匹配，那么会执行 case _ 分支，类似于 Java 中 default 语句
@@ -1742,6 +1744,21 @@ def 函数名（参数名[：参数类型]…）[: 返回值类型 = ] { 函数�
  *  如果函数有返回值，但是返回值类型没有声明，那么方法返回值由 Scala 自行推断
  *  函数调用 : 函数名()，如果函数无参数列表，那么小括号可以省略
  */
+
+// ======================= 函数赋给变量 =========================
+def add(a: Int, b: Int): Int = {
+  a + b
+}
+val test = add _
+// 3
+println(test(1, 2))
+
+// ======================= Lambda匿名函数 =========================
+// 1. val 函数名 = (参数列表) => { //函数体  }
+val add = (a: Int, b: Int) => a + b
+
+// 2. val 函数名: ((参数类型1,参数类型2,.) => 返回值类型) = {(参数1,参数2,.) => {...}
+val add: ((Int, Int) => Int) = (x, y) => x + y
 ```
 
 ##### 过程
@@ -1749,6 +1766,19 @@ def 函数名（参数名[：参数类型]…）[: 返回值类型 = ] { 函数�
 > 将函数的返回类型为 Unit 的函数称之为过程(procedure)，如果明确函数没有返回值，那么等号可以省略
 >
 > 开发工具的自动代码补全功能，虽然会自动加上 Unit，但是考虑到 Scala 语言的简单、灵活，能不加最好不加
+
+##### 高阶函数
+
+```scala
+// ======================= 1.函数作为参数 =========================
+def add(a: Int, b: Int): Int = a + b
+def func(a: Int, b: Int, f: (Int, Int) => Int): Unit = print(f(a, b))
+
+// ======================= 2.返回值为函数 =========================
+def toUp(str: String): String = str.toUpperCase
+def toLo(str: String): String = str.toLowerCase
+def func(flag: Boolean): String => String = if (flag) toUp else toLo
+```
 
 ##### 闭包
 
@@ -1808,3 +1838,351 @@ runInThread {
     println("干完咯！")
 }
 ```
+
+
+
+## 注解
+
+##### 什么可以被注解
+
+```scala
+// 1.可以为类，方法，字段局部变量，参数，表达式，类型参数以及各种类型定义添加注解
+@Entity class Student
+@Test def play() {}
+@BeanProperty var username = _
+def doSomething(@NotNull message: String) {}
+@BeanProperty @Id var username = _
+
+// 2.构造器注解，需要在主构造器之前，类名之后，且需要加括号，如果注解有参数，则写在注解括号里
+class Student @Inject() (var username: String, var password: String)
+
+// 3.为表达式添加注解，在表达式后添加冒号
+（map.get(key): @unchecked) match { ... }
+
+// 4.泛型添加注解
+class Student[@specialized T]
+
+// 5.实际类型添加注解
+String @cps[Unit]
+```
+
+##### 注解实现
+
+> 可以自定义注解，但是更多的是使用 Scala 和 Java 提供的注解
+
+```scala
+// 自定义注解
+class unchecked extends annotation.Annotation { ... }
+```
+
+##### 针对 Java 的注解
+
+```scala
+/** 1.Java修饰符：对于那些不是很常用的 Java 特性，Scala 使用注解，而不是修饰符关键字 */
+// JVM 中将成为 volatile 的字段
+@volatile var done = false
+// 在 JVM 中将成为 transient 字段，该字段不会被序列化
+@transient var recentLookups = new HashMap[String, String]
+@strictfp def calculate(x: Double) = ...
+@native def win32RegKeys(root: Int, path: String): Array[String]
+
+/** 2.标记接口：Scala 用注解 @cloneable 和 @remote 而不是 Cloneable 和 Java.rmi.Remote 
+ *    “标记接口”来标记可被克隆的对象和远程的对象
+ */
+@cloneable class Employee
+
+/** 3.受检异常：和 Scala 不同，Java 编译器会跟踪受检异常
+ *    如果从 Java 代码中调用 Scala 的方法，其签名应包含那些可能被抛出的受检异常，
+ *    用 @throws 注解来生成正确的签名
+ */
+// => Scala 代码
+class Book {
+  @throws (classOf[IOException]) def read(filename: String) { ... }
+}
+// => Java 代码
+// 如果没有 @throws 注解，Java 代码将不能捕获该异常
+try {
+  book.read("war-and-peace.txt");
+} catch (IOException ex) {
+  ...
+}
+```
+
+
+
+## 类型参数
+
+##### [B <: A] 上边界
+
+> 规定泛型可以适用的在继承关系中的范围，“<:” 是上限，表示不超过 A
+
+```scala
+class Pair[T <: Comparable[T]](val first: T, val second: T) {
+  def smaller = if (first.compareTo(second) < 0) first else second
+}
+
+object Main extends App{
+  override def main(args: Array[String]): Unit = {
+    val p = new Pair("Fred", "Brooks")
+    println(p.smaller)
+  }
+}
+```
+
+##### [B >: A] 下边界
+
+> 参数可以随便传，不过
+> 和 A 直系的，是 A 父类的还是父类处理，是 A 子类的按照 A 处理
+> 和 A 无关的，一律按照 Object 处理
+
+```scala
+class Pair[T](val first: T, val second: T) {
+  def replaceFirst[R >: T](newFirst: R) = new Pair[R](newFirst, second)
+  override def toString = "(" + first + "," + second + ")"
+}
+
+object Main extends App{
+  override def main(args: Array[String]): Unit = {
+    val p = new Pair("Nick", "Alice")
+    println(p)
+    println(p.replaceFirst("Joke"))
+    println(p)
+  }
+}
+
+```
+
+##### [T <% V] 视图界定
+
+> 要求必须存在一个从 T 到 V 的隐式转换
+
+```scala
+class Pair[T <% Comparable[T]](val first: T, val second: T) {
+  def smaller = if (first.compareTo(second) < 0) first else second
+  override def toString = "(" + first + "," + second + ")"
+}
+
+object Main3 extends App {
+  /** Int 存在隐式转换
+   * @inline implicit def intWrapper(x: Int) = new runtime.RichInt(x)
+   * RichInt => trait ScalaNumberProxy => trait OrderedProxy
+   *     => trait Ordered => java.lang.Comparable
+   */
+  val p = new Pair(4, 2)
+  println(p.smaller)
+}
+```
+
+##### [T : M] 上下文界定
+
+> M 是另一个泛型类，它要求必须存在一个类型为 M[T] 的隐式值
+
+```scala
+// 下面类定义要求必须存在一个类型为 Ordering[T] 的隐式值
+// 当使用了一个使用了隐式值的方法时，传入该隐式参数
+class Pair[T: Ordering](val first: T, val second: T) {
+  def smaller(implicit ord: Ordering[T]) = {
+    println(ord)
+    if (ord.compare(first, second) < 0) first else second
+  }
+
+  override def toString = "(" + first + "," + second + ")"
+}
+
+object Main extends App{
+  override def main(args: Array[String]): Unit = {
+    val p = new Pair(1, 2)
+    println(p.smaller)
+  }
+}
+```
+
+##### 类型约束
+
+> T =:= U   => T类型是否等于U类型
+>
+> T <:< U   => T类型是否为U或U的子类型
+>
+> T <%< U => T类型是否被隐式（视图）转换为U
+>
+> 如果想使用类型约束，需要添加“隐式类型证明参数”
+
+```scala
+class Pair[T](val first: T, val second: T) {
+  def smaller(implicit ev: T <:< Ordered[T]) = {
+    if(first < second) first else second
+  }
+}
+
+object Main extends App{
+  override def main(args: Array[String]): Unit = {
+    // 构造 Pair[File] 时，注意此时是不会报错的
+    val p = new Pair[File](new File(""), new File(""))
+    // 这时就报错了
+    p.smaller
+  }
+}
+```
+
+##### 型变
+
+> 型变(Variance)拥有三种基本形态：协变(Covariant)，逆变(Contravariant),，不变(Nonconviant)
+>
+> 可以形式化地描述为：
+> 假设类型 C[T] 持有类型参数 T，给定两个类型 A 和 B，若满足 A <: B，则 C[A] 与 C[B] 之间存在三种关系：
+> ​	如果 C[A] <: C[B]，那么 C 是协变的(Covariant)
+> ​	如果 C[A] :> C[B]，那么 C 是逆变的(Contravariant)
+> ​	否则，C 是不变的(Nonvariant)
+>
+> Scala 的类型参数使用 + 标识“协变”，- 标识“逆变”，而不带任何标识的表示“不变”(Nonvariable)
+> ​	trait C[+A]   // C is covariant
+> ​	trait C[-A]    // C is contravariant
+> ​	trait C[A]     // C is nonvariant
+>
+> 如何判断一个类型是否有型变能力：
+> 一般地，“不可变的”(Immutable)类型意味着“型变”(Variant)，而“可变的”(Mutable)意味着“不变”(Nonvariant)
+> 其中，对于不可变的(Immutable)类型 C[T]
+> ​	如果它是一个生产者，其类型参数应该是协变的，即 C[+T]
+> ​	如果它是一个消费者，其类型参数应该是逆变的，即 C[-T]
+
+
+
+## 文件
+
+##### 读取
+
+```scala
+// 读取文件
+val file: BufferedSource = Source.fromFile("test.txt")
+// 读取网络资源
+val webFile: BufferedSource = Source.fromURL("http://www.baidu.com")
+// 转换为字符串
+file.mkString
+// 转换为字符串，以空格间隔
+file.mkString(" ")
+```
+
+##### 写入
+
+```scala
+val writer = new PrintWriter(new File("test.txt"))
+for (i <- 1 to 100) writer.println(i)
+writer.close()
+```
+
+
+
+## 高级类型
+
+##### 类型别名
+
+> 通过 type 关键字来创建别名，类型别名必须被嵌套在类或者对象中，不能出现在 scala 文件的顶层
+
+```scala
+// Scala 里的 String
+type String = java.lang.String
+```
+
+##### 中置类型
+
+> 中置类型是一个带有两个类型参数的类型，以中置语法表示，比如可以将 Map[String, Int] 表示为：
+> val scores: String Map Int = Map("Fred" -> 42)
+
+
+
+## 反射
+
+##### 获取运行时类型信息
+
+> Scala 运行时类型信息保存在 TypeTag 对象中
+> 编译器在编译过程中将类型信息保存到 TypeTag 中，并将其携带到运行期
+
+```scala
+import scala.reflect.runtime.universe._
+// 获取包装 Type 对象的 TypeTag 对象
+val unit: universe.TypeTag[List[Int]] = typeTag[List[Int]]
+// 获取 Type
+val tpe: universe.Type = typeTagList.tpe
+// =========================================
+// 或者直接得到 Type 对象
+val tpe: universe.Type = typeOf[List[Int]]
+// =========================================
+// 获取类型信息
+val decls: universe.MemberScope = tpe.decls
+```
+
+##### 运行时类型实例化
+
+```scala
+class Person(name:String, age: Int) {
+  def myPrint() = {
+    println(name + "," + age)
+  }
+}
+
+object PersonMain extends App{
+  override def main(args: Array[String]): Unit = {
+    // 得到 JavaUniverse 用于反射
+    val ru = scala.reflect.runtime.universe
+    // 得到一个 JavaMirror，一会用于反射 Person.class
+    val mirror = ru.runtimeMirror(getClass.getClassLoader)
+    // 得到Person 类的 Type 对象后，得到 type 的特征值并转为 ClassSymbol 对象
+    val classPerson = ru.typeOf[Person].typeSymbol.asClass
+    //得到 classMirror 对象
+    val classMirror = mirror.reflectClass(classPerson)
+    //得到构造器 Method
+    val constructor = ru.typeOf[Person].decl(ru.termNames.CONSTRUCTOR).asMethod
+    //得到 MethodMirror
+    val methodMirror = classMirror.reflectConstructor(constructor)
+    //实例化该对象
+    val p = methodMirror("Mike", 1)
+    println(p)
+  }
+}
+```
+
+##### 运行时类成员的访问
+
+```scala
+class Person(name:String, age: Int) {
+  def myPrint() = {
+    println(name + "," + age)
+  }
+}
+
+object PersonMain extends App{
+  override def main(args: Array[String]): Unit = {
+    // 获取 Environment 和 universe
+    val ru = scala.reflect.runtime.universe
+    // 获取对应的 Mirrors,这里是运行时的
+    val mirror = ru.runtimeMirror(getClass.getClassLoader)
+    // 得到 Person 类的 Type 对象后，得到 type 的特征值并转为 ClassSymbol 对象
+    val classPerson = ru.typeOf[Person].typeSymbol.asClass
+    // 用 Mirrors 去 reflect 对应的类,返回 Mirrors 的实例,而该 Mirrors 装载着对应类的信息
+    val classMirror = mirror.reflectClass(classPerson)
+    // 得到构造器 Method
+    val constructor = ru.typeOf[Person].decl(ru.termNames.CONSTRUCTOR).asMethod
+    // 得到 MethodMirror
+    val methodMirror = classMirror.reflectConstructor(constructor)
+    // 实例化该对象
+    val p = methodMirror("Mike", 1)
+    println(p)
+
+
+    // 反射方法并调用
+    val instanceMirror = mirror.reflect(p)
+    // 得到 Method 的 Mirror
+    val myPrintMethod = ru.typeOf[Person].decl(ru.TermName("myPrint")).asMethod
+    // 通过 Method 的 Mirror 索取方法
+    val myPrint = instanceMirror.reflectMethod(myPrintMethod)
+    // 运行 myPrint 方法
+    myPrint()
+
+    // 得到属性 Field 的 Mirror
+    val nameField = ru.typeOf[Person].decl(ru.TermName("name")).asTerm
+    val name = instanceMirror.reflectField(nameField)
+    println(name.get)    
+  }
+}
+```
+
