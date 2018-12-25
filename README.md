@@ -8,4 +8,4 @@ It is recommended to watch with typora because it is more convenient to have a c
 
 ### CONTENTS
 
-#### <a href="Scala.md">scala</a> --> Scala tutorial，Review，Beginners
+#### <a href="tutorial/Scala.md">scala</a> --> Scala tutorial，Review，Beginners
