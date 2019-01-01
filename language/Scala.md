@@ -22,6 +22,20 @@
 
 ## 基础语法
 
+##### 输出的三种方式
+
+```scala
+// ===================== 方式一 =====================
+println("hello")
+
+// ===================== 方式二 =====================
+printf("hello,%s","scala")
+
+// ===================== 方式三 =====================
+val name: String = "scala"
+println(s"hello,$name")
+```
+
 ##### var 和 val
 
 > 在声明/定义一个变量时，可以使用 var 或者 val 来修饰， var 修饰的变量可改变，val 修饰的变量不可改 
@@ -195,6 +209,7 @@ inner1.test(inner2)
    
    // 反编译
    public class Person {
+       // 没有 name 属性，只有本身定义的 p_name
        private String p_name;
    
        public Person(final String name) {
