@@ -779,6 +779,7 @@ for k, v in d.items():
 ```python
 # 1.函数的定义
 def 函数名（参数列表）:
+    [""" 文档说明 """]
     函数体
 
 # 示例：
@@ -1150,6 +1151,7 @@ True
 ```python
 # 定义语法：
 class 类名([父类]):
+    [""" 文档说明 """]
 	代码块
     
 class Person:
@@ -1554,11 +1556,494 @@ with open(file_name, 'w', encoding='utf-8') as file_obj:
 
 ```python
 # 1.os.listdir(path='.') 获取指定目录的目录结构，path 是一个路径，返回一个列表
-# 2.os.getcwd() 获取当前所在的目录
-# 3.os.chdir(path) 切换当前所在的目录 作用相当于 cd
-# 4.os.mkdir(path) 创建目录
-# 5.os.rmdir(path) 删除目录
-# 6.os.remove(path) 删除文件
-# 7.os.rename(src, dst) 重命名或移动文件
+# 2.os.getcwd() 		 获取当前所在的目录
+# 3.os.chdir(path) 		 切换当前所在的目录 作用相当于 cd
+# 4.os.mkdir(path) 		 创建目录
+# 5.os.rmdir(path) 		 删除目录
+# 6.os.remove(path)		 删除文件
+# 7.os.rename(src, dst)  重命名或移动文件
+```
+
+
+
+## 进程和线程
+
+#### 多线程
+
+##### 创建
+
+> class threading.Thread(group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None)
+
+```python
+""" ================= 方式一 直接使用 threading 模块 ================== """
+import threading
+
+def test:
+    # ...
+
+t = threading.Thread(target=test, name='TestThread')
+t.start() # 启动线程
+
+""" ================= 方式二 继承 threading.Thread ================== """
+import threading
+
+class MyThread(threading.Thread):
+    def run(self):
+        for i in range(3):
+            msg = "I'm "+self.name+' @ '+str(i) #name属性中保存的是当前线程的名字
+            print(msg)
+
+t = MyThread()
+t.start()
+
+""" ================= 相关方法 ================== """
+# threading 模块的方法
+1.threading.current_thread() 获取当前Thread对象
+2.threading.enumerate()		 返回当前所有 Thread 对象的列表，该列表包括守护线程、虚拟线程
+  len(threading.enumerate()) 返回当前线程数
+
+# thread 对象的方法
+1.start() 			 启动线程
+2.run()   			 线程执行的方法
+3.name	  			 返回线程名称
+4.join(timeout=None) 阻塞调用线程，直到其join（）的线程，方法被称为终止
+5.daemon 			 此线程为守护程序线程（True）或不是（False）
+
+# time 模块
+time.sleep(seconds) 线程阻塞
+```
+
+##### Lock
+
+> class threading.Lock
+>
+> class threading.RLock （可重入锁，a reentrant lock）
+
+```python
+# 创建锁
+mutex = threading.Lock()
+
+# 锁定
+mutex.acquire()
+
+# 释放
+mutex.release()
+
+# 使用互斥锁完成 2 个线程对同一个全局变量各加 100 万次的操作
+import threading
+import time
+
+g_num = 0
+
+def test1(num):
+    global g_num
+    for i in range(num):
+        mutex.acquire()  # 上锁
+        g_num += 1
+        mutex.release()  # 解锁
+
+    print("---test1---g_num=%d"%g_num)
+
+def test2(num):
+    global g_num
+    for i in range(num):
+        mutex.acquire()  # 上锁
+        g_num += 1
+        mutex.release()  # 解锁
+
+    print("---test2---g_num=%d"%g_num)
+
+# 创建一个互斥锁
+mutex = threading.Lock()
+
+# 创建 2 个线程，让他们各自对 g_num 加1000000次
+p1 = threading.Thread(target=test1, args=(1000000,))
+p1.start()
+
+p2 = threading.Thread(target=test2, args=(1000000,))
+p2.start()
+
+# 等待计算完成
+while len(threading.enumerate()) != 1:
+    time.sleep(1)
+
+print("2个线程对同一个全局变量操作之后的最终结果是:%s" % g_num)
+# 运行结果：
+# 	---test1---g_num=1901236
+# 	---test2---g_num=2000000
+# 	2个线程对同一个全局变量操作之后的最终结果是:2000000
+```
+
+##### Thread-local
+
+> 在多线程环境下，每个线程都有自己的数据
+>
+> 一个线程使用自己的局部变量比使用全局变量好
+> 因为局部变量只有线程自己能看见，不会影响其它线程，而全局变量的修改必需加锁（阻塞 -- 效率低）
+
+```python
+import threading
+
+# 创建全局 ThreadLocal 对象:
+local_school = threading.local()
+
+def process_student():
+    # 获取当前线程关联的 student:
+    std = local_school.student
+    print('Hello, %s (in %s)' % (std, threading.current_thread().name))
+
+def process_thread(name):
+    # 绑定 ThreadLocal 的 student:
+    local_school.student = name
+    process_student()
+
+t1 = threading.Thread(target= process_thread, args=('Alice',), name='Thread-A')
+t2 = threading.Thread(target= process_thread, args=('Bob',), name='Thread-B')
+t1.start()
+t2.start()
+t1.join()
+t2.join()
+
+# 全局变量 local_school 就是一个ThreadLocal对象
+# 每个 Thread 对它都可以读写 student 属性，但互不影响
+# 可以把 local_school 看成全局变量，但每个属性如 local_school.student 都是线程的局部变量
+# 可以任意读写而互不干扰，也不用管理锁的问题，ThreadLocal 内部会处理。
+
+# 可以理解为全局变量 local_school 是一个 dict
+# 不但可以用 local_school.student，还可以绑定其他变量，如 local_school.teacher 等等
+
+# ThreadLocal 最常用的地方就是为每个线程绑定一个数据库连接，HTTP请求，用户身份信息等
+# 这样一个线程的所有调用到的处理函数都可以非常方便地访问这些资源
+
+# 一个 ThreadLocal 变量虽然是全局变量，但每个线程都只能读写自己线程的独立副本，互不干扰
+# ThreadLocal 解决了参数在一个线程中各个函数之间互相传递的问题
+```
+
+
+
+#### 多进程
+
+> 进程间不共享全局变量
+
+##### 创建
+
+> Process follows the API of threading.
+
+```python
+""" ============ 方式一 直接使用 multiprocessing.Process 创建 ============ """
+#class multiprocessing.Process(group=None, target=None, name=None, args=(), 
+#                              kwargs={}, *,daemon=None)
+#	- group   指定进程组，大多数情况下用不到
+#	- target  如果传递了函数的引用，可以任务这个子进程就执行这里的代码
+#	- name    给进程设定一个名字，可以不设定
+#	- args    给 target 指定的函数传递的参数，以元组的方式传递
+#	- kwargs  给 target 指定的函数传递命名参数
+    
+from multiprocessing import Process
+import os
+
+# 子进程要执行的代码
+def run_proc(name):
+    # os.getpid 获取当前进程的进程号
+    print('Run child process %s (%s)...' % (name, os.getpid()))
+
+if __name__=='__main__':
+    print('Parent process %s.' % os.getpid())
+    p = Process(target=run_proc, args=('test',))
+    print('Child process will start.')
+    p.start() # 启动进程
+    p.join()  # 等待子进程结束后再继续往下运行
+    print('Child process end.')
+
+# 执行结果如下：
+Parent process 928.
+Process will start.
+Run child process test (929)...
+Process end.
+
+""" ======================= 方式二 使用进程池 ======================== """
+# apply_async(func[, args[, kwds]])
+#		使用非阻塞方式调用 func（并行执行，堵塞方式必须等待上一个进程退出才能执行下一个进程）
+#		args 为传递给 func 的参数列表，kwds 为传递给 func 的关键字参数列表
+# close()  	  关闭 Pool，使其不再接受新的任务
+# terminate() 不管任务是否完成，立即终止
+# join() 	  主进程阻塞，等待子进程的退出， 必须在 close 或 terminate 之后使用
+
+from multiprocessing import Pool
+import os, time, random
+
+def worker(msg):
+    t_start = time.time()
+    print("%s开始执行,进程号为%d" % (msg,os.getpid()))
+    # random.random() 随机生成 0~1 之间的浮点数
+    time.sleep(random.random()*2) 
+    t_stop = time.time()
+    print(msg,"执行完毕，耗时%0.2f" % (t_stop - t_start))
+
+po = Pool(3)  # 定义一个进程池，最大进程数3
+for i in range(0,10):
+    # Pool().apply_async (要调用的目标,(传递给目标的参数元祖,))
+    # 每次循环将会用空闲出来的子进程去调用目标
+    po.apply_async(worker,(i,))
+
+print("---- start ----")
+po.close()  # 关闭进程池，关闭后 po 不再接收新的请求
+po.join()  # 等待 po 中所有子进程执行完成，必须放在 close 语句之后
+print("----- end -----")
+
+""" ==================== Process 实例对象常用方法 ==================== """
+1.start()         启动子进程实例（创建子进程）
+2.is_alive()      判断进程子进程是否还在活着
+3.join([timeout]) 是否等待子进程执行结束，或等待多少秒
+4.terminate()     不管任务是否完成，立即终止子进程
+
+""" ==================== Process 实例对象常用属性 ==================== """
+1.name 当前进程的别名，默认为 Process-N，N 为从 1 开始递增的整数
+2.pid  当前进程的 pid（进程号）
+```
+
+##### 进程间通信
+
+> multiprocessing supports two types of communication channel between processes: Queue、Pipe
+>
+> class multiprocessing.Queue([maxsize ])
+> ​	如果使用 Pool 创建进程，需要使用 multiprocessing.Manager() 中的 Queue()
+> ​	而不是 multiprocessing.Queue()，否则会得到一条如下的错误信息
+> ​	RuntimeError: Queue objects should only be shared between processes through inheritance.
+>
+> multiprocessing.Pipe([duplex ]) duplex为 True（默认值），则管道是双向的
+
+```python
+""" ======================= Queue ======================= """
+# Queue.qsize() 				返回当前队列包含的消息数量
+# Queue.empty() 				如果队列为空，返回 True，反之 False 
+# Queue.full()  				如果队列满了，返回 True,反之 False
+# Queue.get([block[, timeout]]) 获取队列中的一条消息并将其从列队中移除，block 默认值为 True
+# Queue.get_nowait()			相当 Queue.get(False)
+# Queue.put(item,[block[, timeout]]) 将 item 消息写入队列，block 默认值为 True
+# Queue.put_nowait(item)		相当 Queue.put(item, False)
+
+from multiprocessing import Process, Queue
+import os, time, random
+
+# 写数据进程执行的代码:
+def write(q):
+    print('Process to write: %s' % os.getpid())
+    for value in ['A', 'B', 'C']:
+        print('Put %s to queue...' % value)
+        q.put(value)
+        time.sleep(random.random())
+
+# 读数据进程执行的代码:
+def read(q):
+    print('Process to read: %s' % os.getpid())
+    while True:
+        value = q.get(True)
+        print('Get %s from queue.' % value)
+
+if __name__=='__main__':
+    # 父进程创建 Queue，并传给各个子进程：
+    q = Queue()
+    pw = Process(target=write, args=(q,))
+    pr = Process(target=read, args=(q,))
+    # 启动子进程 pw，写入:
+    pw.start()
+    # 启动子进程 pr，读取:
+    pr.start()
+    # 等待 pw 结束:
+    pw.join()
+    # pr 进程里是死循环，无法等待其结束，只能强行终止:
+    pr.terminate()
+    
+# 运行结果如下：
+# 	Process to write: 50563
+# 	Put A to queue...
+# 	Process to read: 50564
+# 	Get A from queue.
+# 	Put B to queue...
+# 	Get B from queue.
+# 	Put C to queue...
+# 	Get C from queue.
+
+""" ======================= Pipe ======================= """
+# send(obj) 发送数据
+# recv()	接收数据
+# close()	关闭连接
+# poll(timeout=None)
+# send_bytes(buffer, offset=-1, size=-1)
+# recv_bytes(maxlength=-1)
+# recv_bytes_into(buffer, offset=-1)
+
+from multiprocessing import Process, Pipe
+
+def f(conn):
+	conn.send([42, None, 'hello']) 
+	conn.close()
+    
+if __name__ == '__main__':
+	parent_conn, child_conn = Pipe()
+	p = Process(target=f, args=(child_conn,))
+	p.start()
+	print(parent_conn.recv()) # prints "[42, None, 'hello']"
+	p.join()
+```
+
+
+
+## 高级语法
+
+#### 迭代器
+
+> 凡是可作用于 `for` 循环的对象都是 `Iterable` 类型
+>
+> 凡是可作用于 `next()` 函数的对象都是 `Iterator` 类型，它们表示一个惰性计算的序列
+>
+> 集合数据类型如 `list`、`dict`、`str` 等是 `Iterable` 但不是 `Iterator`，不过可以通过 `iter()` 函数获得一个 `Iterator` 对象
+
+##### 可迭代对象
+
+> Iterable 的实例对象
+>
+> isinstance(obj, Iterable)
+
+##### Iterator
+
+> 一个实现了 __iter__ 方法和 __next__ 方法的对象，就是迭代器
+
+```python
+# __iter__ 方法提供了一个迭代器
+# 在迭代一个可迭代对象的时候，实际上就是先获取该对象提供的一个迭代器
+# 然后通过这个迭代器来依次获取对象中的每一个数据
+# iter() 函数实际上调用的就是可迭代对象的 __iter__ 方法
+
+# __next__ 返回迭代器的下一条数据
+# next() 函数实际上调用的就是可迭代对象的 __next__ 方法
+```
+
+
+
+#### 生成器
+
+##### 创建方式一
+
+> 把一个列表生成式的`[]`改成`()`，就创建了一个 generator
+
+```python
+>>> L = [x * x for x in range(10)]
+>>> L
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+>>> g = (x * x for x in range(10))
+>>> g
+<generator object <genexpr> at 0x1022ef630>
+```
+
+##### 创建方式二
+
+> 如果一个函数定义中包含`yield`关键字，那么这个函数就不再是一个普通函数，而是一个 generator
+
+```python
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+
+# 注意：
+# 		a, b = b, a + b
+# 	相当于 ==》
+# 		t = (b, a + b) # t是一个tuple
+# 		a = t[0]
+# 		b = t[1]
+
+""" ========================= 总结 ========================= """
+使用了 yield 关键字的函数不再是函数，而是生成器（使用了 yield 的函数就是生成器）
+yield 关键字有两点作用：
+	保存当前运行状态（断点），然后暂停执行，即将生成器（函数）挂起
+	将 yield 关键字后面表达式的值作为返回值返回，此时可以理解为起到了 return 的作用
+	可以使用 next() 函数让生成器从断点处继续执行，即唤醒生成器（函数）
+    
+	Python3 中的生成器可以使用 return 返回最终运行的返回值
+	而 Python2 中的生成器不允许使用 return 返回一个返回值，即可以使用 return 从生成器中退出，但 return 后不能有任何表达式
+```
+
+##### 遍历
+
+```python
+""" ====================== 方式一 ====================== """
+# 通过 next() 函数获得 generator 的下一个返回值 -> 不推荐
+next(g)
+next(f(6))
+
+""" ====================== 方式二 ====================== """
+# 使用for循环 -> 推荐
+for n in g:
+	print(n)
+    
+# 使用 for 循环调用 generator 时，发现拿不到 generator 的 return 语句的返回值
+# 如果想要拿到返回值，必须捕获 StopIteration 错误，返回值包含在 StopIteration 的 value 中
+f = fib(6)
+while True:
+	try:
+		x = next(g)
+		print('g:', x)
+	except StopIteration as e:
+		print('Generator return value:', e.value)
+		break
+```
+
+##### send 唤醒
+
+> send() 函数用来唤醒执行
+>
+> 使用 send() 函数的一个好处是可以在唤醒的同时向断点处传入一个附加数据
+
+```python
+# 执行到 yield 时，gen 函数作用暂时保存，返回 i 的值
+# temp 接收下次 c.send("python")，send 发送过来的值，c.next() 等价 c.send(None)
+def gen():
+	i = 0
+	while i<5:
+		temp = yield i
+		print(temp)
+		i+=1
+        
+# 使用 send
+In [43]: f = gen()
+
+In [44]: next(f)
+Out[44]: 0
+
+In [45]: f.send('haha')
+haha
+Out[45]: 1
+
+In [46]: next(f)
+None
+Out[46]: 2
+
+In [47]: f.send('haha')
+haha
+Out[47]: 3
+```
+
+
+
+#### 深拷贝、浅拷贝
+
+> 浅拷贝是对于一个对象的顶层拷贝，即拷贝了引用，并没有拷贝内容
+>
+> 深拷贝是对于一个对象所有层次的拷贝(递归)
+
+```python
+# 拷贝的三种方式：
+# 	1.直接赋值,默认浅拷贝传递对象的引用,原始列表改变，被赋值的变量也会做相同的改变
+# 	2.copy 浅拷贝，没有拷贝子对象，所以原始数据改变，子对象会改变
+# 	3.深拷贝，包含对象里面的自对象的拷贝，所以原始对象的改变不会造成深拷贝里任何子元素的改变
+
+# 浅拷贝对不可变类型和可变类型的 copy 不同
+# 	copy.copy 对于可变类型，会进行浅拷贝
+# 	copy.copy 对于不可变类型，不会拷贝，仅仅是指向
 ```
 
