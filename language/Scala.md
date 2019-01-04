@@ -49,13 +49,13 @@ println(s"hello,$name")
 > Scala 内置控制结构特地去掉了 break 和 continue，是为了更好的适应函数化编程，推荐使用函数式的风格解决 break 和 contine 的功能，而不是一个关键字
 
 ```scala
-import util.control.Breaks._
+import scala.util.control.Breaks._
 
 var n: Int = 0
-breakable{
-  while(n <= 20){
+breakable {
+  while(n <= 20) {
     n += 1
-    if(n == 18){
+    if(n == 18) {
       break()
     }
   }
