@@ -90,10 +90,10 @@ print(a)
 
 ```python
 a = 123
-# print("a = " + a) # 这种写法在 Python 中不常见
-print('a =',a)      # 方式一，结果为 a = 123，逗号间自动添加空格
-print('a = %d'%a)   # 方式二
-print(f'a = {a}')   # 方式三
+# print("a = " + a)   # 这种写法在 Python 中不常见
+print('a =', a)       # 方式一，结果为 a = 123，逗号间自动添加空格
+print('a = %d' % a)   # 方式二
+print(f'a = {a}')     # 方式三
 
 # 注意：print 语句括号里有可选参数 end，如果设置 end = ''，则表示不换行
 print(a, end='||') # 123||
@@ -230,7 +230,7 @@ try:
     print(10/0)
 except [exception_name [as Alias]]:
     # 放置出错以后处理措施
-[except [exception_name [as Alias]]:
+[except [exception_name [as Alias]]]:
     # 放置出错以后处理措施]
 [else:
     # 程序正常执行没有错误时的处理]
@@ -411,7 +411,7 @@ c = 0x10 # 十六进制的 10，十进制为 16
 
 ##### str 与 butes
 
-> Python 对 bytes 类型的数据用带b前缀的单引号或双引号表示
+> Python 对 bytes 类型的数据用带 b 前缀的单引号或双引号表示
 
 ```python
 a = b'ABC'
@@ -498,10 +498,10 @@ stus[::2] = ['牛魔王','红孩儿','二郎神']
 ##### 删除元素
 
 ```python
-del stus[0]
-del stus[0:2]
-del stus[::2]
-stus[1:3] = []
+del stus[0]    # 删除第 1 个元素
+del stus[0:2]  # 删除第 1 个和第 2 个元素 
+del stus[::2]  # 从第 1 个元素开始，每隔 2 个元素就删除
+stus[1:3] = [] # 将第 2 个和第 3 个元素置为空，等同于删除第 2 个和第 3 个元素
 ```
 
 ##### 方法
@@ -509,28 +509,28 @@ stus[1:3] = []
 ```python
 test = [1,2,3,4]
 
-# 1.append(element)，向列表的最后添加一个元素
+# 1.append(element) 向列表的最后添加一个元素
 test.append(5) # test = [1, 2, 3, 4, 5]
 
-# 2.insert(index, element)，向列表的指定位置插入一个元素
+# 2.insert(index, element) 向列表的指定位置插入一个元素
 test.insert(1, 10) # test = [1, 10, 2, 3, 4, 5]
 
-# 3.extend(sequence)，使用新的序列来扩展当前序列，等价于 +=
+# 3.extend(sequence) 使用新的序列来扩展当前序列，等价于 +=
 test.extend([6,7]) # test = [1, 10, 2, 3, 4, 5, 6, 7]
 
-# 4.pop(index)，删除并返回索引所在的元素，不加索引则删除最后一个元素
+# 4.pop(index) 删除并返回索引所在的元素，不加索引则删除最后一个元素
 test.pop(1) # 10
 
-# 5.remove(element)，删除指定的元素，如果相同值的元素有多个，只会删除第一个
+# 5.remove(element) 删除指定的元素，如果相同值的元素有多个，只会删除第一个
 test.remove(1) # test = [2, 3, 4, 5, 6, 7]
 
-# 6.reverse()，反转列表
+# 6.reverse() 反转列表
 test.reverse() # test = [7, 6, 5, 4, 3, 2]
 
-# 7.sort()，对列表中的元素排序
+# 7.sort() 对列表中的元素排序
 #   默认是升序排列，如果需要降序排列，需要传递一个 reverse = True 作为参数
 
-# 8.clear()，清空序列
+# 8.clear() 清空序列
 test.clear() # test = []
 ```
 
@@ -561,7 +561,7 @@ while i < len(test):
 > 使用 () 创建元组
 
 ```python
-my_tuple = () # 创建了一个空元组
+my_tuple = ()          # 创建了一个空元组
 my_tuple = (1,2,3,4,5) # 创建了一个5个元素的元组
 
 # 当元组不是空元组时，括号可以省略，如果元组不是空元组，它里边至少要有一个逗号
@@ -590,7 +590,7 @@ a, b, *c = my_tuple # a = 10, b = 20, c = [30, 40]
 a, *b, c = my_tuple # a = 10, b = [20, 30], c = 40
 *a, b, c = my_tuple # a = [10, 20], b = 30, c = 40
 
-# 不能同时出现两个或以上的*变量
+# 不能同时出现两个或以上的 * 变量
 # *a , *b , c = my_tuple # SyntaxError: two starred expressions in assignment
 
 # ps : 交换 a, b 的值，可以利用元组的解包
@@ -623,8 +623,8 @@ s = set({'a':1,'b':2,'c':3}) # 使用 set() 将字典转换为集合时，只会
 
 ```python
 # 1.x in s / x not in s 检查元素 x 是否在集合中，返回 True 或 False
-# 2.len(s) 获取集合中元素的数量
-# 3.add(elem) 向集合中添加元素
+# 2.len(s)              获取集合中元素的数量
+# 3.add(elem)           向集合中添加元素
 
 # 4.update(seq) 将一个集合中的元素添加到当前集合中,可以传递序列或字典作为参数，字典只会使用键
 s1 = {1, 2, 3}
@@ -632,12 +632,12 @@ s2 = set('hello')
 s1.update(s2)
 print(s1) # {1, 2, 3, 'h', 'o', 'e', 'l'}
 
-# 5.pop() 随机删除集合中的一个元素并返回
-# 6.remove(elem) 删除集合中的指定元素
-# 7.clear() 清空集合
-# 8.copy() 对集合进行浅复制
-# 9.difference(*others) 返回一个新集合，其中集合中的元素不在其他集合中
-# 10.union(*others) 并集
+# 5.pop()                  随机删除集合中的一个元素并返回
+# 6.remove(elem)           删除集合中的指定元素
+# 7.clear()                清空集合
+# 8.copy()                 对集合进行浅复制
+# 9.difference(*others)    返回一个新集合，其中集合中的元素不在其他集合中
+# 10.union(*others)        并集
 # 11.intersection(*others) 交集 
 ```
 
@@ -688,11 +688,11 @@ result = {1,2,3} <= {1,2,3,4,5} # True
 > 字典的键是不能重复的，如果重复会替换值
 
 ```python
-# 方式一，使用 {} 创建
+# 方式一 使用 {} 创建
 my_dict = {} 										   # 创建了一个空字典
 my_dict = {'name': '孙悟空', 'age': 18, 'gender': '男'} # 创建了一个有内容的字典
 
-# 方式二，使用 dict() 函数创建
+# 方式二 使用 dict() 函数创建
 my_dict = dict(name='孙悟空', age=18, gender='男')
 my_dict = dict([('name','孙悟饭'),('age',18)]) # 可以将一个包含有双值子序列的序列转换为字典
 ```
@@ -1231,7 +1231,7 @@ class D:
 
 > 特殊方法，也称为魔术方法
 >
-> 特殊方法都是使用__开头和结尾的
+> 特殊方法都是使用 __ 开头和结尾的
 >
 > 特殊方法一般不需要我们手动调用，需要在一些特殊情况下自动执行
 
@@ -1307,9 +1307,9 @@ print(p._Person__name) # Tom
 p._Person__name = 'Lucy'
 print(p._Person__name) # Lucy
 
-# 使用__开头的属性，实际上依然可以在外部访问，所以这种方式一般不用
-# 一般会将一些私有属性（不希望被外部访问的属性）以_开头
-# 一般情况下，使用_开头的属性都是私有属性，没有特殊需要不要修改私有属性
+# 使用 __ 开头的属性，实际上依然可以在外部访问，所以这种方式一般不用
+# 一般会将一些私有属性（不希望被外部访问的属性）以 _ 开头
+# 一般情况下，使用 _ 开头的属性都是私有属性，没有特殊需要不要修改私有属性
 
 """ ================= 私有属性 ================= """
 # property 装饰器，用来将一个 get 方法，转换为对象的属性
@@ -1516,11 +1516,11 @@ file_obj.close()		   # 关闭文件
 
 ##### 读取
 
-> def read(self, n: int = -1)，n 表示每次读取的字符数
+> def read(self, n: int = -1)               n 表示每次读取的字符数
 >
-> def readline(self, limit: int = -1)，读取一行
+> def readline(self, limit: int = -1)   读取一行
 >
-> def readlines(self, hint: int = -1)，一行一行地读取内容，会一次性将读取到的内容封装到一个列表中返回
+> def readlines(self, hint: int = -1)   一行一行地读取内容，会一次性将读取到的内容封装到一个列表中返回
 
 ```python
 # open() 默认的编码为 None，需手动指定编码格式
@@ -1531,7 +1531,7 @@ with open(file_name, encoding='utf-8') as file_obj:
     content = file_obj.read(6)
     print(content)
     
-# <- seek() 修改当前读取的位置 ->
+# seek() 修改当前读取的位置
 # def seek(self, offset: int, whence: int = 0)
 # 	- offset 是要切换到的位置(偏移量)
 # 	- whence 计算位置方式
@@ -1539,8 +1539,7 @@ with open(file_name, encoding='utf-8') as file_obj:
 # 		1 从当前位置计算
 # 		2 从最后位置开始计算
 
-# <- tell() 查看当前读取的位置 ->
-
+# tell() 查看当前读取的位置
 ```
 
 ##### 写入
@@ -1642,7 +1641,7 @@ def test1(num):
         g_num += 1
         mutex.release()  # 解锁
 
-    print("---test1---g_num=%d"%g_num)
+    print("---test1---g_num=%d" % g_num)
 
 def test2(num):
     global g_num
@@ -1651,7 +1650,7 @@ def test2(num):
         g_num += 1
         mutex.release()  # 解锁
 
-    print("---test2---g_num=%d"%g_num)
+    print("---test2---g_num=%d" % g_num)
 
 # 创建一个互斥锁
 mutex = threading.Lock()
@@ -1763,8 +1762,9 @@ Process end.
 
 """ ======================= 方式二 使用进程池 ======================== """
 # apply_async(func[, args[, kwds]])
-#		使用非阻塞方式调用 func（并行执行，堵塞方式必须等待上一个进程退出才能执行下一个进程）
-#		args 为传递给 func 的参数列表，kwds 为传递给 func 的关键字参数列表
+# 	使用非阻塞方式调用 func（并行执行，堵塞方式必须等待上一个进程退出才能执行下一个进程）
+# 	args 为传递给 func 的参数列表，kwds 为传递给 func 的关键字参数列表
+
 # close()  	  关闭 Pool，使其不再接受新的任务
 # terminate() 不管任务是否完成，立即终止
 # join() 	  主进程阻塞，等待子进程的退出， 必须在 close 或 terminate 之后使用
@@ -1774,7 +1774,7 @@ import os, time, random
 
 def worker(msg):
     t_start = time.time()
-    print("%s开始执行,进程号为%d" % (msg,os.getpid()))
+    print("%s开始执行,进程号为%d" % (msg, os.getpid()))
     # random.random() 随机生成 0~1 之间的浮点数
     time.sleep(random.random()*2) 
     t_stop = time.time()
@@ -1977,7 +1977,7 @@ next(g)
 next(f(6))
 
 """ ====================== 方式二 ====================== """
-# 使用for循环 -> 推荐
+# 使用 for 循环 -> 推荐
 for n in g:
 	print(n)
     

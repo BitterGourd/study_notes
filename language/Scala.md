@@ -29,11 +29,11 @@
 println("hello")
 
 // ===================== 方式二 =====================
-printf("hello,%s","scala")
+printf("hello,%s", "scala")
 
 // ===================== 方式三 =====================
 val name: String = "scala"
-println(s"hello,$name")
+println(s"hello, $name")
 ```
 
 ##### var 和 val
@@ -76,7 +76,7 @@ println(res)
 
 ##### 异常
 
-> Scala 提供 try 和 catch 块来处理异常
+> 1.Scala 提供 try 和 catch 块来处理异常
 
 ```scala
 try {
@@ -90,15 +90,15 @@ try {
 }
 ```
 
-> 用 throw 关键字，抛出一个异常对象。所有异常都是 Throwable 的子类型。throw 表达式是有类型的，就是 Nothing，因为 Nothing 是所有类型的子类型，所以 throw 表达式可以用在需要类型的地方
+> 2.用 throw 关键字，抛出一个异常对象。所有异常都是 Throwable 的子类型。throw 表达式是有类型的，就是 Nothing，因为 Nothing 是所有类型的子类型，所以 throw 表达式可以用在需要类型的地方
 
 ```scala
 def test(): Unit = throw new IllegalArgumentException("test.....")
 ```
 
-> 在 Scala 中，可以使用 throws 注释来声明异常 
+> 3.在 Scala 中，可以使用 throws 注释来声明异常 
 >
-> 它向调用者函数提供了此方法可能引发此异常的信息，有助于调用函数处理并将该代码包含在 try-catch 块中，以避免程序异常终止。在scala中，可以使用throws注释来声明异常
+> 它向调用者函数提供了此方法可能引发此异常的信息，有助于调用函数处理并将该代码包含在 try-catch 块中，以避免程序异常终止
 
 ```scala
 // classOf[IllegalArgumentException] 等同于 IllegalArgumentException.class
@@ -158,7 +158,7 @@ OuterClass.StaticInnerClass staticInner = new OuterClass.StaticInnerClass();
 // ================= scala ================== 
 class OuterClass {
     class InnerClass {}
-    // Scala中没有静态的概念，所以静态内部类不是放在类中声明，而是放置在类的伴生对象中声明
+    // Scala 中没有静态的概念，所以静态内部类不是放在类中声明，而是放置在类的伴生对象中声明
 	// static class StatisInnerClass {}
 }
 object OuterClass {
@@ -173,7 +173,7 @@ val staticInner = new OuterClass.StaticInnerClass()
 ##### 类型投影
 
 > 在方法声明上，如果使用  <font color=#0099ff>外部类#内部类</font>  的方式，表示忽略内部类的对象关系
-> 等同于Java中内部类的语法操作，我们将这种方式称之为 类型投影
+> 等同于 Java 中内部类的语法操作，我们将这种方式称之为 类型投影
 > 即：忽略对象的创建方式，只考虑类型
 
 ```scala
@@ -595,7 +595,7 @@ def test (): Unit = {
 
 ##### 重命名和隐藏
 
-> 如果引入的多个包中含有相同的类，那么可以进行重命名进行区分
+> 1.如果引入的多个包中含有相同的类，那么可以进行重命名进行区分
 
 ```scala
 import java.util.{ HashMap=>JavaHashMap, List}
@@ -624,7 +624,7 @@ var map = new HashMap ()
 
 > 重写一个非抽象方法需要用 <font color=#0099ff>override</font> 修饰符，调用超类的方法使用 <font color=#0099ff>super</font> 关键字
 >
-> 抽象属性重写时，可以不增加 override 关键字
+> 2.抽象属性重写时，可以不增加 override 关键字
 
 ```scala
 class Person {
@@ -706,10 +706,10 @@ class 子类名 extends 父类 with 特质1 with 特质2 with 特质3 {...}
 
 ```scala
 trait Logger {
-  // 明确告诉编译器，我就是Exception
+  // 明确告诉编译器，我就是 Exception
   this: Exception =>
   def log(): Unit = {
-    // 既然我就是Exception, 那么就可以调用其中的方法
+    // 既然我就是 Exception, 那么就可以调用其中的方法
     println(getMessage)
   }
 }
@@ -871,19 +871,19 @@ object Test {
    // (2) ++= 在尾端添加集合
    array ++= Array(4,5,6)
    
-   // (3) trimStart(n)/trimEnd(n) 移除最 前/后 n个元素
+   // (3) trimStart(n)/trimEnd(n) 移除最 前/后 n 个元素
    array.trimEnd(2)
    
-   // (4) insert(n,x) 在下标为n的位置插入单个元素x
+   // (4) insert(n,x) 在下标为 n 的位置插入单个元素 x
    array.insert(2,99)
    
-   // (5) insert(n,x1,x2,x3,..) 在下标为n的位置插入多个元素x1,x2,x3,.. 
+   // (5) insert(n,x1,x2,x3,..) 在下标为 n 的位置插入多个元素 x1,x2,x3,.. 
    array.insert(2,44,55,66)
    
-   // (6) remove(index) 移除下标为i的位置的元素
+   // (6) remove(index) 移除下标为 i 的位置的元素
    array.remove(1)
    
-   // (7) remove(index,n) 移除下标为i的位置开始的n个元素(包括i) 
+   // (7) remove(index,n) 移除下标为 i 的位置开始的 n 个元素(包括i) 
    array.remove(1,4)
    
    // (8) toArray() 转换为长度不可变数组
@@ -975,7 +975,7 @@ val arr = Array.ofDim[Double](3,4)
 // 方式一
 val t1 = (1,2.0,"lisi")
 
-// 方式二	可以通过a,b,c直接访问对应元素
+// 方式二	可以通过 a,b,c 直接访问对应元素
 val t1,(a,b,c) = ("zhangsan","lisi","wangwu")
 
 // 方式三	Tuple1,Tuple2,Tuple3...
@@ -1028,7 +1028,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (3) ++ 将两个集合合并成一个新的集合
    val list3 = list1 ++ list2
    
-   // (4) ++: 将集合lsit1插入list2前面，生成新集合
+   // (4) ++: 将集合 lsit1 插入 list2 前面，生成新集合
    val list4 = list1 ++: list2
    
    // (5) :: 将给定的头和尾链接起来，创建一个新的列表
@@ -1038,7 +1038,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (6) ::: 将集合中的每一个元素加入到空集合中去[要求::: 左右两边都是集合]
    val list6 = list1 ::: Nil
    
-   // (7) .:::() 将集合lsit1插入list2后面，生成新集合
+   // (7) .:::() 将集合 lsit1 插入 list2 后面，生成新集合
    val list5 = list1.:::(list2)
    ```
 
@@ -1065,10 +1065,10 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (2) append 将元素插入到集合后
    list.append(5)
    
-   // (3) ++= 将集合list2追加到list1中(没有生成新的集合)
+   // (3) ++= 将集合 list2 追加到 list1 中(没有生成新的集合)
    list1 ++= list2
    
-   // (4) ++ 将list1和list2合并成一个新的集合
+   // (4) ++ 将 list1 和 list2 合并成一个新的集合
    val list3 = list1 ++ list2
    
    // (5) :+ 将元素插入到集合后，并生成新的集合
@@ -1077,7 +1077,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (6) +: 将元素插入到集合前，并生成新的集合
    val list5 = 99 +: list
    
-   // (7) ++: 将集合lsit1插入list2前面，生成新集合
+   // (7) ++: 将集合 lsit1 插入 list2 前面，生成新集合
    val list6 = list1 ++: list2
    ```
 
@@ -1106,7 +1106,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (3) ++ 将两个集合合并成一个新的集合
    val queue3 = queue1 ++ queue2
    
-   // (4) ++: 将集合lsit1插入list2前面，生成新集合
+   // (4) ++: 将集合 lsit1 插入 list2 前面，生成新集合
    val queue4 = queue1 ++: queue2
    ```
 
@@ -1130,10 +1130,10 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (1) += 将元素插入到集合后，多个元素用 () 包起来
    queue += 4
    
-   // (2) ++= 将集合queue2追加到queue1中(没有生成新的集合)
+   // (2) ++= 将集合 queue2 追加到 queue1 中(没有生成新的集合)
    queue1 ++= queue2
    
-   // (4) ++ 将list1和list2合并成一个新的集合
+   // (4) ++ 将 list1 和 list2 合并成一个新的集合
    val queue3 = queue1 ++ queue2
    
    // (5) :+ 将元素插入到集合后，并生成新的集合
@@ -1142,7 +1142,7 @@ for (item <- t1.productIterator) { println("item = " + item) }
    // (5) +: 将元素插入到集合前，并生成新的集合
    val queue5 = 99 +: queue
    
-   // (6) ++: 将集合lsit1插入list2前面，生成新集合
+   // (6) ++: 将集合 lsit1 插入 list2 前面，生成新集合
    val queue4 = queue1 ++: queue2
    ```
 
@@ -1317,7 +1317,7 @@ for (v <- map.values) print("value = " + v + "\t")
    set.add(5)
    set add 6
    
-   // (3) ++= 追加一个Set集合(没有创建新集合)
+   // (3) ++= 追加一个 Set 集合(没有创建新集合)
    set ++= set1
    
    // (4) -= 删除元素，多个元素用（）包起来
@@ -1410,7 +1410,7 @@ val res = arr1 zip arr2
 
 ```scala
 val arr = Array(1,2,3)
-val res = arr.forall(x => x > 2)	// false
+val res = arr.forall(x => x > 2) // false
 ```
 
 ##### partition
@@ -1437,7 +1437,7 @@ val res3 = arr.reduceRight((x,y) => x - y)
 
 ##### fold/foldLeft/foldRight
 
-> 可以把reduceLeft看做简化版的foldLeft
+> 可以把 reduceLeft 看做简化版的 foldLeft
 >
 > def reduceLeft[B >: A](@deprecatedName('f) op: (B, A) => B): B =
 >
@@ -1472,17 +1472,17 @@ val res1 = (arr :\ 5)((x,y) => x - y)
 ##### groupBy/grouped
 
 ```scala
-/** groupBy 返回一个新的Map集合，按照key将元素进行分组 */
+/** groupBy 返回一个新的 Map 集合，按照 key 将元素进行分组 */
 List("boy" -> "xiaobei", "boy" -> "xiaonan", "girl" -> "xiaotian").groupBy(x => x._1)
 //	Map(girl -> List((girl,xiaotian)), boy -> List((boy,xiaobei), (boy,xiaonan)))
 
-/** grouped 根据给定的长度n, 进行分组, 每n个元素分为一组 */
+/** grouped 根据给定的长度 n, 进行分组, 每 n 个元素分为一组 */
 Array(1,2,3,4,5).grouped(2)	// 返回值是 Iterator[Array[Int]]
 ```
 
 ##### mapValues
 
-> 在Map数据结构里，对value进行操作
+> 在 Map 数据结构里，对 value 进行操作
 
 ```scala
 // Map(dog -> 3, cat -> 2)
@@ -1504,7 +1504,7 @@ println("stream = " + stream)
 println(stream.tail)
 // (1,2,?)
 println("stream =" + stream)
-println("stream.head=" + stream.head)
+println("stream.head = " + stream.head)
 // 死循环，last 表示返回集合最后一个元素
 // println("stream.last" + stream.last)
 ```
@@ -1529,7 +1529,7 @@ for (item <- res) print(item + " ")
 
 > 从第一个 case 分支开始匹配，如果匹配成功，那么执行对应的逻辑代码
 >
-> 每个case中，不用 break 语句，自动中断 case
+> 每个 case 中，不用 break 语句，自动中断 case
 >
 > 如果匹配不成功，继续执行下一个分支进行判断
 >
@@ -1625,9 +1625,9 @@ for (arr <- Array(Array(0), Array(1, 0), Array(0, 1, 0), Array(1, 1, 0), Array(1
 
 ##### 匹配列表
 
-> 0 :: Nil 匹配只有一个元素且为 0 的列表
+> 0 :: Nil       匹配只有一个元素且为 0 的列表
 > x :: y :: Nil 匹配列表有两个元素，并将两个元素赋值给 x 和 y
-> 0 :: tail 匹配列表以 0 开始
+> 0 :: tail      匹配列表以 0 开始
 
 ```scala
 for (list <- Array(List(0), List(1, 0), List(0, 0, 0), List(1, 0, 0))) {
@@ -1721,7 +1721,7 @@ for (amt <- Array(Dollar(1000.0), Currency(1000.0, "EUR"), Nothing)) {
 
 ```scala
 // ====================== 实现偏函数 =======================
-// 定义一个将List集合里面数字加1的偏函数
+// 定义一个将 List 集合里面数字加 1 的偏函数
 // 构建特质的实现类
 // [Any, Int]是泛型，第一个表示参数类型，第二个表示返回参数
 val addOne = new PartialFunction[Any, Int] {
@@ -1729,8 +1729,8 @@ val addOne = new PartialFunction[Any, Int] {
   def isDefinedAt(any: Any) = if (any.isInstanceOf[Int]) true else false
 }
 
-val list1 = list.map(addOne) // (X) map函数不支持偏函数
-val list1 = list.collect(addOne) // OK collect函数支持偏函数
+val list1 = list.map(addOne)     // (X) map 函数不支持偏函数
+val list1 = list.collect(addOne) // (√) collect 函数支持偏函数
 println(list1)
 
 // ====================== 简单的实现方法 =======================
@@ -1808,7 +1808,7 @@ val f = minus(20)
 def makeSuffix(suffix: String) = {
     // 1. 返回的是一个匿名函数
     // 2. 该匿名函数使用到 外部的变化 suffix
-    // 3. 那么匿名函数和外部的suffix 共同构成一个整体，我们称为闭包
+    // 3. 那么匿名函数和外部的 suffix 共同构成一个整体，我们称为闭包
     (name:String) => {
     	if (name.endsWith(suffix)) name
 		else name + suffix
@@ -2182,7 +2182,6 @@ object PersonMain extends App{
     // 实例化该对象
     val p = methodMirror("Mike", 1)
     println(p)
-
 
     // 反射方法并调用
     val instanceMirror = mirror.reflect(p)

@@ -1,10 +1,6 @@
-Some study notes.
+由于目录较为冗长，出于篇幅考虑并未在文档中添加目录。
 
-一些学习笔记。
-
-It is recommended to watch with typora because it is more convenient to have a catalog.
-
-推荐使用 typora 阅读，因为有目录观看更方便。
+推荐使用类似 Typora 的 markdown 编辑器阅读，有书签更方便阅读。
 
 ### CONTENTS
 
