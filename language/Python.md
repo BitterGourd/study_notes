@@ -2,17 +2,19 @@
 
 ##### python 介绍
 
-> Python 由 Guido van Rossum（吉多·范罗苏姆，人称龟叔）创造
+> Python 由 Guido van Rossum（吉多·范罗苏姆，人称龟叔）设计
 >
 > Python 是一门解释型语言，不会在执行前对代码进行编译，而是在执行的同时一边执行一边编译
 >
-> Python 的设计哲学强调代码的可读性和简洁的语法，尤其是使用空格缩进划分代码块，而非使用大括号或者关键词
+> Python 是一门交互式语言，可以在一个 Python 提示符，直接互动执行写程序
+>
+> Python 是一门面向对象语言，支持面向对象的风格或代码封装在对象的编程技术
 
 ##### python 解释器
 
 > CPython（官方）
 > ​	用 C 语言编写的 Python 解释器
->  PyPy
+> PyPy
 > ​	用 Python 语言编写的 Python 解释器
 > IronPython
 > ​	用 .Net 编写的 Python 解释器
@@ -133,35 +135,6 @@ total = ['item_one', 'item_two', 'item_three',
 ```python
 a = 123
 print(type(a)) # <class 'int'>
-```
-
-##### 类型转换
-
-> 类型转换四个函数 int()、float()、str()、bool()
-
-```python
-# =========== 1.int() 将其他的对象转换为整型 ===========
-#   布尔值：True -> 1   False -> 0
-#   浮点数：直接取整，省略小数点后的内容
-#   字符串：合法的整数字符串，直接转换为对应的数字
-#          如果不是一个合法的整数字符串，则报错
-#		   ValueError: invalid literal for int() with base 10: '11.5'
-#   对于其他不可转换为整型的对象，直接抛出异常 ValueError
-# 注意：int() 函数不会对原来的变量产生影响，它是对象转换为指定的类型并将其作为返回值返回
-# 	   如果希望修改原来的变量，则需要对变量进行重新赋值
-
-# =========== 2.float() 将其他的对象转换为浮点数 ===========
-# float() 和 int()基本一致，不同的是它会将对象转换为浮点数
-
-# =========== 3.str() 可以将对象转换为字符串 ===========
-#  True -> 'True'
-#  False -> 'False'
-#  123 -> '123'
-
-# =========== 4.bool() 将对象转换为布尔值 ===========
-# 任何对象都可以转换为布尔值
-# 对于所有表示空性的对象都会转换为 False，其余的转换为 True
-# 表示空性的对象: 0、None、''
 ```
 
 ##### 运算符
@@ -322,6 +295,9 @@ for s in 'hello':
 > Set Types                          —  set, frozenset
 >
 > Mapping Types                —  dict
+>
+> 不可变类型：str, Number, tuple
+> 可变类型：list, set, dict
 
 #### Numbers（数字）
 
@@ -330,6 +306,8 @@ for s in 'hello':
 ```python
 # Python 数值分成了三种：整数、浮点数（小数）、复数，布尔值（bool）是整数的子类型
 # 在 Python 中所有的整数都是 int 类型，所有的小数都是 float 类型
+# 复数表示方式：x = 2 + 2j
+
 # Python 中的整数的大小没有限制，可以是一个无限大的整数
 # 对浮点数进行运算时，可能会得到一个不精确的结果
 # 如果数字的长度过大，可以使用下划线作为分隔符
@@ -409,7 +387,36 @@ c = 0x10 # 十六进制的 10，十进制为 16
 | %s     | 字符串       |
 | %x     | 十六进制整数 |
 
-##### str 与 butes
+##### 常用方法
+
+| 方法                                 | 描述                                                         |
+| ------------------------------------ | ------------------------------------------------------------ |
+| capitalize()                         | 将字符串的第一个字符转换为大写                               |
+| endswith(suffix,beg=0,end=len(str))  | 检查字符串是否以 obj 结束                                    |
+| expandtabs(tabsize=8)                | 把字符串 str 中的 tab 符号转为空格，tab 符号默认的空格数是 8 |
+| find(str, beg=0 end=len(str))        | 检测 str 是否包含在字符串中,如果包含返回开始的索引值，否则返回 -1 |
+| index(str, beg=0, end=len(str))      | 跟 find() 方法一样，只不过如果 str 不在字符串中会报一个异常  |
+| isalnum()                            | 如果字符串至少有一个字符并且所有字符都是字母或数字则返回 True,否则返回 False |
+| isdigit()                            | 如果字符串只包含数字则返回 True 否则返回 False               |
+| isnumeric()                          | 如果字符串中只包含数字字符，则返回 True，否则返回 False      |
+| isspace()                            | 如果字符串中只包含空白，则返回 True，否则返回 False          |
+| join(seq)                            | 以指定字符串作为分隔符，将 seq 中所有的元素(的字符串表示)合并为一个新的字符串 |
+| len(string)                          | 返回字符串长度                                               |
+| lower()                              | 转换字符串中所有大写字符为小写                               |
+| lstrip(chars:Optional[str])          | 截掉字符串左边的空格或指定字符                               |
+| max(str)                             | 返回字符串 str 中最大的字母                                  |
+| min(str)                             | 返回字符串 str 中最小的字母                                  |
+| replace(old, new [, max])            | 把 将字符串中的 str1 替换成 str2，如果 max 指定，则替换不超过 max 次 |
+| rfind(str, beg=0,end=len(str))       | 类似于 find() 函数，不过是从右边开始查找                     |
+| rindex( str, beg=0, end=len(str))    | 类似于 index()，不过是从右边开始                             |
+| rstrip(chars:Optional[str])          | 删除字符串字符串末尾的空格                                   |
+| split(str="", num=string.count(str)) | num=string.count(str)) 以 str 为分隔符截取字符串，如果 num 有指定值，则仅截取 num 个子字符串 |
+| splitlines(keepends:bool)            | 按照行('\r', '\r\n', \n')分隔                                |
+| startswith(str,beg=0,end=len(str))   | 检查字符串是否是以 obj 开头                                  |
+| strip(chars:Optional[str])           | 在字符串上执行 lstrip() 和 rstrip()                          |
+| upper()                              | 转换字符串中的小写字母为大写                                 |
+
+##### str 与 bytes
 
 > Python 对 bytes 类型的数据用带 b 前缀的单引号或双引号表示
 
@@ -639,6 +646,17 @@ print(s1) # {1, 2, 3, 'h', 'o', 'e', 'l'}
 # 9.difference(*others)    返回一个新集合，其中集合中的元素不在其他集合中
 # 10.union(*others)        并集
 # 11.intersection(*others) 交集 
+# 12.discard(element)      删除集合中指定的元素
+
+# 13.issubset(s:Iterable[object])      判断指定集合是否为该方法参数集合的子集
+# 14.issuperset(s:Iterable[object])    判断该方法的参数集合是否为指定集合的子集
+
+# 15.difference_update(*s:Iterable[object])   移除集合中的元素，该元素在指定的集合也存在
+# 16.intersection_update(*s:Iterable[object]) 删除集合中的元素，该元素在指定的集合中不存在
+# 17.symmetric_difference(s:Iterable[_T])     返回两个集合中不重复的元素集合
+
+# 18.isdisjoint(s:Iterable[object]) 判断两个集合是否包含相同的元素，如果没有返回 True，否则返回 False
+# 19.symmetric_difference_update(s:Iterable[_T]) 移除当前集合中在另外一个指定集合相同的元素，并将另外一个指定集合中不同的元素插入到当前集合中
 ```
 
 #####  运算
@@ -701,6 +719,8 @@ my_dict = dict([('name','孙悟饭'),('age',18)]) # 可以将一个包含有双�
 
 ```python
 my_dict = {'name': '孙悟空', 'age': 18, 'gender': '男'}
+
+# str(dict) 将 dict 装换成字符串 -> dict 转 json 串
 
 # 1.len(d) 获取字典中键值对的个数
 print(len(my_dict)) # 3
@@ -772,7 +792,38 @@ for k, v in d.items():
 
 
 
-## 函数式编程
+#### 类型转换
+
+> 类型转换四个函数 int()、float()、str()、bool()
+
+```python
+# =========== 1.int() 将其他的对象转换为整型 ===========
+#   布尔值：True -> 1   False -> 0
+#   浮点数：直接取整，省略小数点后的内容
+#   字符串：合法的整数字符串，直接转换为对应的数字
+#          如果不是一个合法的整数字符串，则报错
+#		   ValueError: invalid literal for int() with base 10: '11.5'
+#   对于其他不可转换为整型的对象，直接抛出异常 ValueError
+# 注意：int() 函数不会对原来的变量产生影响，它是对象转换为指定的类型并将其作为返回值返回
+# 	   如果希望修改原来的变量，则需要对变量进行重新赋值
+
+# =========== 2.float() 将其他的对象转换为浮点数 ===========
+# float() 和 int()基本一致，不同的是它会将对象转换为浮点数
+
+# =========== 3.str() 可以将对象转换为字符串 ===========
+#  True -> 'True'
+#  False -> 'False'
+#  123 -> '123'
+
+# =========== 4.bool() 将对象转换为布尔值 ===========
+# 任何对象都可以转换为布尔值
+# 对于所有表示空性的对象都会转换为 False，其余的转换为 True
+# 表示空性的对象: 0、None、''
+```
+
+
+
+## 函数
 
 #### 简介
 
@@ -882,8 +933,30 @@ def sum(*nums):
 #### 作用域
 
 > 作用域（scope）: 指的是变量生效的区域
+>
+> L （Local）        局部作用域
+>
+> E （Enclosing） 闭包函数外的函数中
+>
+> G （Global）     全局作用域
+>
+> B （Built-in）    内建作用域
+>
+> L –> E –> G –> B
 
 ```python
+x = int(2.9)  				# 内建作用域
+g_count = 0  				# 全局作用域
+
+def outer():
+    o_count = 1  			# 闭包函数外的函数中
+    def inner():
+        i_count = 2  		# 局部作用域
+		o_count += 1
+        
+	inner()
+outer()
+
 #  全局作用域
 #   - 全局作用域在程序执行时创建，在程序执行结束时销毁
 #   - 所有函数以外的区域都是全局作用域
@@ -1144,7 +1217,7 @@ True
 
 
 
-## 面向对象编程
+## 面向对象
 
 ##### 类的定义
 
@@ -2045,5 +2118,10 @@ Out[47]: 3
 # 浅拷贝对不可变类型和可变类型的 copy 不同
 # 	copy.copy 对于可变类型，会进行浅拷贝
 # 	copy.copy 对于不可变类型，不会拷贝，仅仅是指向
+
+# 注意：
+# 	1.对于不可变类型 Number、String、Tuple,浅复制仅仅是地址指向，不会开辟新空间
+# 	2.对于可变类型 List、Dictionary、Set，浅复制会开辟新的空间地址(仅仅是最顶层开辟了新的空间，里层的元素地址还是一样的)，进行浅拷贝
+# 	3.浅拷贝后，改变原始对象中为可变类型的元素的值，会同时影响拷贝对象的；改变原始对象中为不可变类型的元素的值，只有原始类型受影响
 ```
 
