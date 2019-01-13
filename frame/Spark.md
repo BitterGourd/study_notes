@@ -1151,7 +1151,7 @@ val ssc = new StreamingContext(sc, Seconds(1))
 	④ 使用 `streamingContext.awaitTermination()` 等待处理被终止（手动或者由于任何错误）
 	⑤ 可以使用 *streamingContext.stop()* 来手动停止处理
 
-##### 要点
+#### 要点
 
 - 一旦 StreamingContext 启动，将不会有新的流式计算可以被创建或者添加到它
 
@@ -1316,7 +1316,7 @@ val joinedStream   = windowedStream.transform { rdd => rdd.join(dataset) }
 | **saveAsHadoopFiles**(*prefix*, [*suffix*]) | 将此 DStream 的内容另存为 Hadoop 文件。每个批处理间隔的文件名是根据 *前缀* 和 *后缀* : *"prefix-TIME_IN_MS[.suffix]"* 生成的。 |
 | **foreachRDD**(*func*)                      | 对从流中生成的每个 RDD 应用函数 *func* 的最通用的输出运算符。此功能应将每个 RDD 中的数据推送到外部系统，例如将 RDD 保存到文件，或将其通过网络写入数据库。请注意，函数 *func* 在运行流应用程序的 driver 进程中执行，通常会在其中具有 RDD 动作，这将强制流式传输 RDD 的计算。 |
 
-##### foreachRDD 的使用
+#### foreachRDD 的使用
 
 ​	常见错误：在  driver 中创建连接对象，然后在 worker 中使用。
 
@@ -1413,6 +1413,4 @@ dstream.foreachRDD { rdd =>
 
 
 
-参考文档：<a href="http://spark.apache.org/docs/latest/">Spark 官方文档</a>
-
-​		   <a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.package">Spark 2.4.0 ScalaDoc</a>
+**参考文档：** <a href="http://spark.apache.org/docs/latest/">Spark 官方文档</a>	     <a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.package">Spark 2.4.0 ScalaDoc</a>
