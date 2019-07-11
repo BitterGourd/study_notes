@@ -1323,8 +1323,8 @@ val joinedStream   = windowedStream.transform { rdd => rdd.join(dataset) }
 ```scala
 // 错误示例
 dstream.foreachRDD { rdd =>
+  val connection = createNewConnection()
   rdd.foreach { record =>
-    val connection = createNewConnection()
     connection.send(record)
     connection.close()
   }
